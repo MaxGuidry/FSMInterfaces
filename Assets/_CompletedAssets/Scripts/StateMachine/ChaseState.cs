@@ -5,7 +5,7 @@ using System;
 public class ChaseState : IEnemyState
 {
     private readonly StatePatternEnemy enemy;
-    private Transform knownPosition;
+    private Vector3 knownPosition;
     public ChaseState(StatePatternEnemy statePatternEnemy)
     {
         enemy = statePatternEnemy;
@@ -14,9 +14,11 @@ public class ChaseState : IEnemyState
     {
         RaycastHit hit;
         Vector3 enemyToTarget = ((enemy.chaseTarget.position + enemy.offset) - enemy.eyes.transform.position);
-        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.sightRange) && hit.collider.CompareTag("Player"))
+        
+        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.sightRange)&&hit.collider.CompareTag("Player"))
         {
             enemy.chaseTarget = hit.transform;
+            Debug.DrawLine(enemy.eyes.position, enemy.chaseTarget.position, Color.blue);
 
         }
         else
@@ -26,7 +28,7 @@ public class ChaseState : IEnemyState
     }
     public void OnTriggerEnter(Collider other)
     {
-        throw new NotImplementedException();
+        Debug.Log("stuff");
     }
 
     public void ToAlertState()
@@ -36,12 +38,11 @@ public class ChaseState : IEnemyState
 
     public void ToChaseState()
     {
-        throw new NotImplementedException();
     }
 
     public void ToPatrolState()
     {
-        throw new NotImplementedException();
+       
     }
 
     public void UpdateState()
@@ -54,7 +55,7 @@ public class ChaseState : IEnemyState
     {
         enemy.meshRendererFlag.material.color = Color.red;
         enemy.navMeshAgent.destination = enemy.chaseTarget.position;
-        knownPosition = enemy.chaseTarget.transform;
+        knownPosition = enemy.chaseTarget.position;
         enemy.navMeshAgent.Resume();
     }
 
@@ -62,6 +63,7 @@ public class ChaseState : IEnemyState
     {
         enemy.currentState = enemy.lastPositionState;
         enemy.lastKnownPosition = knownPosition;
+        
     }
 
 }

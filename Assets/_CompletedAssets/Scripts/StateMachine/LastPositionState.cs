@@ -27,12 +27,12 @@ public class LastPositionState : IEnemyState
 
     public void ToLastPositionState()
     {
-        throw new NotImplementedException();
+       
     }
 
     public void ToPatrolState()
     {
-        throw new NotImplementedException();
+       
     }
 
     public void UpdateState()
@@ -43,7 +43,8 @@ public class LastPositionState : IEnemyState
     private void Look()
     {
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange) && hit.collider.CompareTag("Player"))
+        int layerMask = 0 << 8;
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange,layerMask) && hit.collider.CompareTag("Player"))
         {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
@@ -53,10 +54,15 @@ public class LastPositionState : IEnemyState
     private void GoTo()
     {
         enemy.meshRendererFlag.material.color = Color.blue;
-        enemy.navMeshAgent.destination = enemy.lastKnownPosition.position;
-        //Debug.Log(enemy.lastKnownPosition.position);
+        enemy.navMeshAgent.Stop();
+        enemy.navMeshAgent.destination = enemy.lastKnownPosition;
         enemy.navMeshAgent.Resume();
-        if((enemy.transform.position - enemy.lastKnownPosition.position).magnitude>=0f&& (enemy.transform.position - enemy.lastKnownPosition.position).magnitude<=2f)
+        //Debug.Log(enemy.lastKnownPosition.position);
+        
+        if(
+            (enemy.transform.position - enemy.lastKnownPosition).magnitude >= 0f 
+            && 
+            (enemy.transform.position - enemy.lastKnownPosition).magnitude <= 2f)
         {
            
             ToAlertState();

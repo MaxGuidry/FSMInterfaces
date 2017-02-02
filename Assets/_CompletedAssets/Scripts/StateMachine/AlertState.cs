@@ -14,12 +14,12 @@ public class AlertState : IEnemyState
 
     public void OnTriggerEnter(Collider other)
     {
-        throw new NotImplementedException();
+       
     }
 
     public void ToAlertState()
     {
-        throw new NotImplementedException();
+        
     }
 
     public void ToChaseState()
@@ -30,7 +30,7 @@ public class AlertState : IEnemyState
 
     public void ToLastPositionState()
     {
-        throw new NotImplementedException();
+        
     }
 
     public void ToPatrolState()
@@ -47,8 +47,9 @@ public class AlertState : IEnemyState
     private void Look()
     {
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange) && hit.collider.CompareTag("Player"))
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange,enemy.layermask) && hit.collider.CompareTag("Player"))
         {
+            Debug.Log("this is working");
             enemy.chaseTarget = hit.transform;
             ToChaseState();
 
