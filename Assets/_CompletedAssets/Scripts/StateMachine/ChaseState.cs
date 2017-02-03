@@ -38,6 +38,7 @@ public class ChaseState : IEnemyState
 
     public void ToChaseState()
     {
+
     }
 
     public void ToPatrolState()
